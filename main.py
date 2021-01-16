@@ -1,15 +1,30 @@
 from tkinter import *
 import pytube
 import os
+os.system('cls')
 def download():
     video_url = url.get()
     username = os.getenv('UserName')
     try:
+        percorso = "C:/Users/"+username+"/Desktop/Videos"
+        os.chdir(percorso)
+        lista = os.listdir()
+        if 'video.mp4' in lista:
+            os.remove('video.mp4')
+            print("[*] rimosso vecchio video")
         youtube = pytube.YouTube(video_url)
         video   = youtube.streams.first()
-        percorso = "C:/Users/"+username+"/Desktop/Videos"
+        print(f'[*] VIDEO: {youtube.title}')
         video.download(str(percorso))
+        print("[*] Download del video...")
         notif.config(fg="green", text=f"Video salvato in {str(percorso)}")
+        print("[*] Download completo")
+        comando = str(f'rename "{str(youtube.title)}.mp4" video.mp4')
+        print("[*] Video rinominato")
+        os.system(comando)
+        os.system('start video.mp4')
+        print("[*] Video aperto")
+
     except Exception as e:
         print(e)
         notif.config(fg="red", text="ERRORE")
